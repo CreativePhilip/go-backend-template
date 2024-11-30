@@ -52,7 +52,7 @@ func Client() *sqlx.DB {
 	envCfg := config.GetConfig()
 	pool := ClientFromConfig(ClientConfig{
 		Host:     envCfg.PostgresHost,
-		User:     envCfg.PostgresDb,
+		User:     envCfg.PostgresUser,
 		Password: envCfg.PostgresPassword,
 		Database: envCfg.PostgresDatabase,
 	})

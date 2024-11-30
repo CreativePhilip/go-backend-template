@@ -1,0 +1,61 @@
+name: On Push
+
+
+on:
+  push:
+
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ^1.23.0
+      - name: "Build Server"
+        run: go build -C src/cmd/server
+
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_DB: ps_db
+      POSTGRES_USER: ps_user
+      POSTGRES_PASSWORD: ps_password
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+
+      PASSWORD_SALT: salt
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ps_db
+          POSTGRES_USER: ps_user
+          POSTGRES_PASSWORD: ps_password
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ^1.23.0
+      - name: Install Atlas
+        run: curl -sSf https://atlasgo.sh | sh
+      - name: Set Env
+        run: >
+          echo "SCHEMA_LOCATION=$GITHUB_WORKSPACE/schema.hcl" >> $GITHUB_ENV
+      - name: "Test"
+        run: go test -v ./...

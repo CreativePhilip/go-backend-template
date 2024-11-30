@@ -1,10 +1,14 @@
 package config
 
-import cfgo "github.com/CreativePhilip/cfgo/src"
+import (
+	"fmt"
+	cfgo "github.com/CreativePhilip/cfgo/src"
+	"os"
+)
 
 type AppConfig struct {
 	PostgresHost     string `env:"POSTGRES_HOST"`
-	PostgresDb       string `env:"POSTGRES_DB"`
+	PostgresUser     string `env:"POSTGRES_USER"`
 	PostgresPassword string `env:"POSTGRES_PASSWORD"`
 	PostgresDatabase string `env:"POSTGRES_DB"`
 
@@ -19,7 +23,8 @@ func GetConfig() AppConfig {
 	cfgo.LoadType(&appConfig, cfgo.NewEnvConfiguration(cfgo.EnvConfiguration{
 		BoolValidTrueValues: nil,
 		Providers: []cfgo.ConfigSourceProvider{
-			cfgo.NewEnvFileVariableSourceProvider("/Users/philip/code/fitsy-booksy-yolo/backend/env/local/*.env"),
+			cfgo.NewEnvFileVariableSourceProvider(fmt.Sprintf("%s/env/local/*.env", os.Getenv("ENV_FILES_DIR"))),
+			cfgo.NewEnvVariablesSourceProvider(),
 		},
 	}))
 
