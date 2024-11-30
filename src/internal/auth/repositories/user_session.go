@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"github.com/CreativePhilip/backend/src/db"
 	"github.com/gofrs/uuid"
-	"github.com/jmoiron/sqlx"
 	"time"
 )
 
@@ -21,7 +21,7 @@ type UserSessionRepository interface {
 }
 
 type DbUserSessionRepository struct {
-	Db *sqlx.DB
+	Db db.CommonDbTx
 }
 
 func (r *DbUserSessionRepository) CreateSession(userId uint) (UserSession, error) {
@@ -39,7 +39,7 @@ func (r *DbUserSessionRepository) CreateSession(userId uint) (UserSession, error
 		CreatedAt:   time.Now(),
 	}
 
-	err = r.Db.QueryRow(
+	err = r.Db.QueryRowx(
 		query,
 		session.UserId,
 		session.CookieValue,

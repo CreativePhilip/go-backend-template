@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"github.com/CreativePhilip/backend/src/db"
 	"github.com/CreativePhilip/backend/src/utils"
-	"github.com/jmoiron/sqlx"
 	"time"
 )
 
@@ -24,7 +24,7 @@ type UserRepository interface {
 }
 
 type DbUserRepository struct {
-	Db *sqlx.DB
+	Db db.CommonDbTx
 }
 
 func (r *DbUserRepository) GetById(id uint) (*User, error) {
@@ -46,7 +46,7 @@ func (r *DbUserRepository) GetByEmail(email string) (*User, error) {
 
 func (r *DbUserRepository) Create(user User) (*User, error) {
 	query := readFromFs("queries/user/create.sql")
-	err := r.Db.QueryRow(
+	err := r.Db.QueryRowx(
 		query,
 		user.FirstName,
 		user.LastName,
