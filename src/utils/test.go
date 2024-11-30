@@ -21,7 +21,7 @@ func testClient() (*sqlx.DB, func()) {
 	envCfg := config.GetConfig()
 	cfg := db.ClientConfig{
 		Host:     envCfg.PostgresHost,
-		User:     envCfg.PostgresDb,
+		User:     envCfg.PostgresUser,
 		Password: envCfg.PostgresPassword,
 		Database: envCfg.PostgresDatabase + "_test",
 	}
@@ -120,7 +120,7 @@ func connectToTestInstanceWithoutDb(cfg db.ClientConfig) *sql.DB {
 	rawDb, err := sql.Open(
 		"postgres",
 		fmt.Sprintf(
-			"host=%s user=%s password=%s sslmode=disable",
+			"host=%s user=%s password=%s sslmode=disable dbname=postgres",
 			cfg.Host,
 			cfg.User,
 			cfg.Password,
