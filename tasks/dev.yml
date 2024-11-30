@@ -1,0 +1,16 @@
+version: 3
+
+tasks:
+  db:migrate:
+    dotenv:
+      - env/local/db.env
+    cmd: 'atlas schema apply 
+            --url "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB?sslmode=disable&search_path=public"
+            --to file://schema.hcl
+            --dev-url "docker://postgres/16"
+          '
+
+  db:migrate:full-sql:
+    dotenv:
+      - env/local/db.env
+    cmd: 'atlas schema apply --url "docker://postgres/16" --to file://schema.hcl --dev-url "docker://postgres/16" --dry-run > schema.sql'

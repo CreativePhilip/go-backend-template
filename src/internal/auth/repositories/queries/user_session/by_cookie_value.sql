@@ -1,0 +1,1 @@
+select * from user_session where cookie_value = $1 limit 1
