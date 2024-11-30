@@ -6,5 +6,7 @@ import (
 )
 
 func BuildTopLevelRoutes(e *echo.Echo) {
+	e.Use(ErrorHandlerMiddleware)
+
 	auth.BuildRoutes(e.Group("/auth"))
 }
