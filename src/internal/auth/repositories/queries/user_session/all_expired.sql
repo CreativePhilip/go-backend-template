@@ -1,0 +1,1 @@
+select * from user_session where expires_at < now()

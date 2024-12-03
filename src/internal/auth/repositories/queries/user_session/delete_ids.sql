@@ -1,0 +1,1 @@
+delete from user_session where id in (?)
