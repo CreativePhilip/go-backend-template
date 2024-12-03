@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestDbUserSessionRepository_CreateSession(t *testing.T) {
+func TestDbUserSessionRepository_Create(t *testing.T) {
 	db, teardown := testutils.SetupIntegrationTest()
 	defer teardown()
 
@@ -23,13 +23,13 @@ func TestDbUserSessionRepository_CreateSession(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	newSession, err := sessions.CreateSession(user.Id)
+	newSession, err := sessions.Create(user.Id)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, newSession)
 }
 
-func TestDbUserSessionRepository_GetSessionByCookieValue(t *testing.T) {
+func TestDbUserSessionRepository_GetByCookieValue(t *testing.T) {
 	db, teardown := testutils.SetupIntegrationTest()
 	defer teardown()
 
@@ -46,12 +46,12 @@ func TestDbUserSessionRepository_GetSessionByCookieValue(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	newSession, err := sessions.CreateSession(user.Id)
+	newSession, err := sessions.Create(user.Id)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, newSession)
 
-	fetchedSession, err := sessions.GetSessionByCookieValue(newSession.CookieValue)
+	fetchedSession, err := sessions.GetByCookieValue(newSession.CookieValue)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, fetchedSession)

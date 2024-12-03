@@ -5,18 +5,18 @@ import (
 	"net/http"
 )
 
-type Endpoint[TIn any, TOut any] interface {
-	Handler(*TIn) (*TOut, error)
+type Endpoint[TIn any, TOut any, Context any] interface {
+	Handler(*TIn, Context) (*TOut, error)
 
 	ValidateInput(*TIn) error
 	ValidateOutput(*TOut) error
 }
 
-func New[TIn any, TOut any](e Endpoint[TIn, TOut]) echo.HandlerFunc {
-	return func(echo echo.Context) error {
+func New[TIn any, TOut any, Context any](e Endpoint[TIn, TOut, Context]) echo.HandlerFunc {
+	return func(echoContext echo.Context) error {
 		payload := new(TIn)
 
-		if err := echo.Bind(payload); err != nil {
+		if err := echoContext.Bind(payload); err != nil {
 			return err
 		}
 
@@ -26,12 +26,13 @@ func New[TIn any, TOut any](e Endpoint[TIn, TOut]) echo.HandlerFunc {
 			return err
 		}
 
-		response, err := e.Handler(payload)
+		ctx := e.(Context)
+		response, err := e.Handler(payload, ctx)
 
 		if err != nil {
 			return err
 		}
 
-		return echo.JSON(http.StatusOK, response)
+		return echoContext.JSON(http.StatusOK, response)
 	}
 }

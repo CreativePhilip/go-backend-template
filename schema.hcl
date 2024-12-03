@@ -94,8 +94,12 @@ table "user_session" {
     on_delete = CASCADE
   }
 
-  index "user_session_cookie_value_unique" {
+  index "idx__cookie_value" {
     columns = [column.cookie_value]
+  }
+
+  index "idx__expires_at" {
+    columns = [column.expires_at]
   }
 }
 
