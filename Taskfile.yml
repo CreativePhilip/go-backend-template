@@ -2,3 +2,4 @@ version: 3
 
 includes:
   dev: "./tasks/dev.yml"
+  test: "./tasks/test.yml"

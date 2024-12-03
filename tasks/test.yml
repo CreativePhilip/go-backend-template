@@ -1,0 +1,9 @@
+version: 3
+
+env:
+  ENV_FILES_DIR: "{{.ROOT_DIR}}"
+
+tasks:
+  all:
+    cmd: echo $ENV_FILES_DIR && go test -v ./...
+
